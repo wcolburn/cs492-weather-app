@@ -11,6 +11,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      // TODO: Change this title to CS492 Weather App. This one will not appear in the emulator. Remove the TODO when complete
       title: 'Flutter Demo',
       theme: ThemeData(
         // This is the theme of your application.
@@ -31,6 +32,7 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
+      // TODO: Change this title to CS492 Weather App. This one will appear in the emulator. Remove the TODO when complete
       home: const MyHomePage(title: 'Flutter Demo Home Page'),
     );
   }
