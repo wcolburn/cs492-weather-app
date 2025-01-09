@@ -55,17 +55,32 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
 
-  void _incrementCounter() {
+  // Add More names to myNames
+  // use a number to track the index of the name you want to use.
+  // Cycle through the names when you press the button, incrementing the number
+  // When you reach the highest index, reset the number back to 0
+  // Make sure that it's dynamic so if you add/remove names from the list, it still functions.
+
+  final List<String> _myNames = [
+    "Dan",
+    "Steve"
+  ];
+
+  String? _myName;
+
+  @override
+  void initState() {
+    super.initState();
+    _myName = _myNames[0];   
+    
+  }
+
+  void onPressed(){
     setState(() {
-      // This call to setState tells the Flutter framework that something has
-      // changed in this State, which causes it to rerun the build method below
-      // so that the display can reflect the updated values. If we changed
-      // _counter without calling setState(), then the build method would not be
-      // called again, and so nothing would appear to happen.
-      _counter++;
+      _myName = _myNames[1];
     });
+    
   }
 
   @override
@@ -86,7 +101,7 @@ class _MyHomePageState extends State<MyHomePage> {
         // the App.build method, and use it to set our appbar title.
         title: Text(widget.title),
       ),
-      body: const Center(
+      body: Center(
         // Center is a layout widget. It takes a single child and positions it
         // in the middle of the parent.
         child: Column(
@@ -105,9 +120,20 @@ class _MyHomePageState extends State<MyHomePage> {
           // wireframe for each widget.
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            Text(
-              'Hello World!',
-            )
+            Container(
+              width: 200,
+              height: 100,
+              decoration: BoxDecoration(border: Border.all()),
+              child: Center(
+                child: Text(
+                  'Hello $_myName!',
+                  textAlign: TextAlign.center,
+                ),
+              ),
+            ),
+            TextButton(
+              onPressed: onPressed, 
+              child: const Text("Press Me Please!!!!"))
           ],
         ),
       ),
