@@ -77,22 +77,6 @@ As mentioned above, you'll need to fetch the latest changes each time as the bra
     git checkout -b assignment1-1 upstream/assignment1-1
   ```
 
-5. **Install dependencies and run the app**
-
-Be sure you select a device by clicking in the lower right corner of VSCode where it may say "No Device" to drop down available devices, and choose the android/iphone device that you set up.
-
-Install dependencies:
-
-```bash
-   flutter pub get
-```
-
-Run flutter:
-
-```bash
-  flutter run
-```
-
 5. **Complete the TODOs**
 
 Look through the assignment and complete all of the TODOs for that assignment.
@@ -100,7 +84,7 @@ Look through the assignment and complete all of the TODOs for that assignment.
 6. **Stage Changes**
 It should be safe to stage all changes (unless you made changes to files outside of the scope of the assignment)
   ```bash
-     git add *
+     git stage *
   ```
 
 7. **Commit Changes**
