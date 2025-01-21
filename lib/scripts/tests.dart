@@ -14,7 +14,19 @@ void testLocation() async {
   // Debug with a breakpoint after the return (you can use a placeholder like print("test") for your breakpoint)
   // Check to ensure each location returns as expected through debugging. 
 
-  location.getLocationFromAddress("oijeqofwkjfla", "asdfsd", "98839829382");
+  List<Map<String, String>> locations = [
+    {"city": "Jacksonville", "state": "", "zip": ""},
+    {"city": "Redmond", "state": "Oregon", "zip": "97756"},
+    {"city": "", "state": "", "zip": "97756"},
+    {"city": "", "state": "", "zip:": "91911"},
+    {"city": "San Diego", "state": "", "zip": ""},
+  ];
+
+  for (Map<String, String> loc in locations){
+    location.Location? gottenLocation = await location.getLocationFromAddress(loc["city"], loc["state"], loc["zip"]);
+    print("Test");
+  }
+
 
 }
 
