@@ -65,7 +65,8 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
 
   List<forecast.Forecast> _forecastsHourly = [];
-  // create a new variable for _forecasts
+  // TODO create a new variable for _forecasts
+  List<forecast.Forecast> _forecasts = [];
   forecast.Forecast? _activeForecast;
   location.Location? _location;
 
@@ -81,6 +82,9 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   // TODO: create a new function getForecasts that returns forecast.getForecastFromPoints
+  Future<List<forecast.Forecast>> getForecasts(location.Location currentLocation) async {
+    return forecast.getForecastFromPoints(currentLocation.latitude, currentLocation.longitude);
+  }
 
   void setActiveHourlyForecast(int i){
     setState(() {
@@ -89,6 +93,12 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   // create a new function: setActiveHourlyForecast that updates _activeForecast with _forecasts[i]
+  void setActiveForecast(int i){
+    setState(() {
+      _activeForecast = _forecasts[i];
+    });
+  }
+
 
 
   void setLocation() async {
@@ -96,12 +106,13 @@ class _MyHomePageState extends State<MyHomePage> {
       location.Location currentLocation = await location.getLocationFromGps();
 
       List<forecast.Forecast> currentHourlyForecasts = await getHourlyForecasts(currentLocation);
+      List<forecast.Forecast> currentForecasts = await getForecasts(currentLocation);
 
       setState(() {
         _location = currentLocation;
+        _activeForecast = currentHourlyForecasts[0];
         _forecastsHourly = currentHourlyForecasts;
-        _activeForecast = _forecastsHourly[10];
-        
+        _forecasts = currentForecasts;
       });
     }
   }
@@ -132,7 +143,9 @@ class _MyHomePageState extends State<MyHomePage> {
               LocationWidget(location: _location),
               _activeForecast != null ? ForecastWidget(forecast: _activeForecast!) : Text(""),
               // TODO add a new ForecastSummariesWidget for the daily forecasts
-              _forecastsHourly.isNotEmpty ? ForecastSummariesWidget(forecasts: _forecastsHourly, setActiveForecast: setActiveHourlyForecast) : Text("")
+              _forecasts.isNotEmpty ? ForecastSummariesWidget(forecasts: _forecasts, setActiveForecast: setActiveForecast) : Text(""),
+              _forecastsHourly.isNotEmpty ? ForecastSummariesWidget(forecasts: _forecastsHourly.where((forecast) => 
+          forecast.startTime?.substring(1,11) == _activeForecast?.startTime?.substring(1,11)).toList(), setActiveForecast: setActiveHourlyForecast) : Text(""),
             ],
           ),
         ),
