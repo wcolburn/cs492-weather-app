@@ -118,24 +118,25 @@ class _MyHomePageState extends State<MyHomePage> {
     return _forecastsHourly.where((f)=>time.equalDates(f.startTime, _dailyForecasts[i].startTime)).toList();
   }
 
-  void setLocation() async {
-    if (_location == null){
-      location.Location currentLocation = await location.getLocationFromGps();
-
-      List<forecast.Forecast> currentHourlyForecasts = await getHourlyForecasts(currentLocation);
-      List<forecast.Forecast> currentForecasts = await getForecasts(currentLocation);
-
-      setState(() {
-        _location = currentLocation;
-        _forecastsHourly = currentHourlyForecasts;
-        _forecasts = currentForecasts;
-        setDailyForecasts();
-        _filteredForecastsHourly = getFilteredForecasts(0);
-        _activeForecast = _forecastsHourly[0];
-        
-        
-      });
+  void setLocation([List<String>? locationList]) async {
+    location.Location currentLocation;
+    if (locationList != null) {
+      currentLocation = await location.getLocationFromAddress(locationList[0], locationList[1], locationList[2]) as location.Location;
+    } else {
+      currentLocation = await location.getLocationFromGps();
     }
+
+    List<forecast.Forecast> currentHourlyForecasts = await getHourlyForecasts(currentLocation);
+    List<forecast.Forecast> currentForecasts = await getForecasts(currentLocation);
+
+    setState(() {
+      _location = currentLocation;
+      _forecastsHourly = currentHourlyForecasts;
+      _forecasts = currentForecasts;
+      setDailyForecasts();
+      _filteredForecastsHourly = getFilteredForecasts(0);
+      _activeForecast = _forecastsHourly[0];
+    });
   }
 
   @override
@@ -189,7 +190,59 @@ class LocationTabWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Text("PLACEHOLDER!!!!!");
+    return MyCustomForm();
+  }
+}
+
+class MyCustomForm extends StatefulWidget {
+  const MyCustomForm({super.key});
+
+  @override
+  State<MyCustomForm> createState() => _MyCustomFormState();
+}
+
+// Define a corresponding State class.
+// This class holds the data related to the Form.
+class _MyCustomFormState extends State<MyCustomForm> {
+  // Create a text controller and use it to retrieve the current value
+  // of the TextField.
+  final myController = TextEditingController();
+
+  @override
+  void dispose() {
+    // Clean up the controller when the widget is disposed.
+    myController.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: Padding(
+        padding: const EdgeInsets.all(16),
+        child: TextField(
+          controller: myController,
+        ),
+      ),
+      floatingActionButton: FloatingActionButton(
+        // When the user presses the button, show an alert dialog containing
+        // the text that the user has entered into the text field.
+        onPressed: () {
+          showDialog(
+            context: context,
+            builder: (context) {
+              return AlertDialog(
+                // Retrieve the text the that user has entered by using the
+                // TextEditingController.
+                content: Text(myController.text),
+              );
+            },
+          );
+        },
+        tooltip: 'Show me the value!',
+        child: const Icon(Icons.text_fields),
+      ),
+    );
   }
 }
 
