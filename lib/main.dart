@@ -244,17 +244,31 @@ class _MyCustomFormState extends State<MyCustomForm> {
             TextField(
               controller: zipController,
             ),
+            SizedBox(height: 200),
+            Column(children: [
+              Text("Set location to GPS"),
+              Align(
+                alignment: Alignment.bottomCenter,
+                child: FloatingActionButton(onPressed: () { widget._setLocation(); })
+              )
+            ],)
           ],
         ),
       ),
-      floatingActionButton: FloatingActionButton(
-        // When the user presses the button, show an alert dialog containing
-        // the text that the user has entered into the text field.
-        onPressed: () {
-          widget._setLocation([cityController.text, stateController.text, zipController.text]);
-        },
-        tooltip: 'Show me the value!',
-        child: const Icon(Icons.text_fields),
+      floatingActionButton: Container(
+        height: 200,
+        width: 500,
+        child: FittedBox(
+          child: FloatingActionButton(
+            // When the user presses the button, show an alert dialog containing
+            // the text that the user has entered into the text field.
+            onPressed: () {
+              widget._setLocation([cityController.text, stateController.text, zipController.text]);
+            },
+            tooltip: 'Show me the value!',
+            child: const Text("Set city/state/zip!"),
+          ),
+        ),
       ),
     );
   }
