@@ -174,7 +174,7 @@ class _MyHomePageState extends State<MyHomePage> {
             filteredForecastsHourly: _filteredForecastsHourly,
             setActiveForecast: setActiveForecast,
             setActiveHourlyForecast: setActiveHourlyForecast),
-          LocationTabWidget()]
+          LocationTabWidget(setLocation: setLocation)]
         ),
       ),
     );
@@ -186,16 +186,21 @@ class _MyHomePageState extends State<MyHomePage> {
 class LocationTabWidget extends StatelessWidget {
   const LocationTabWidget({
     super.key,
-  });
+    required Function setLocation,
+  }) : _setLocation = setLocation;
+
+  final Function _setLocation;
 
   @override
   Widget build(BuildContext context) {
-    return MyCustomForm();
+    return MyCustomForm(_setLocation);
   }
 }
 
 class MyCustomForm extends StatefulWidget {
-  const MyCustomForm({super.key});
+  const MyCustomForm(Function setLocation, {super.key}) : _setLocation = setLocation;
+
+  final Function _setLocation;
 
   @override
   State<MyCustomForm> createState() => _MyCustomFormState();
@@ -206,12 +211,20 @@ class MyCustomForm extends StatefulWidget {
 class _MyCustomFormState extends State<MyCustomForm> {
   // Create a text controller and use it to retrieve the current value
   // of the TextField.
-  final myController = TextEditingController();
+  final cityController = TextEditingController();
+  final stateController = TextEditingController();
+  final zipController = TextEditingController();
+  
+  // Function setLocation;
+  // _MyCustomFormState(this.setLocation);
+  
 
   @override
   void dispose() {
     // Clean up the controller when the widget is disposed.
-    myController.dispose();
+    cityController.dispose();
+    stateController.dispose();
+    zipController.dispose();
     super.dispose();
   }
 
@@ -220,24 +233,25 @@ class _MyCustomFormState extends State<MyCustomForm> {
     return Scaffold(
       body: Padding(
         padding: const EdgeInsets.all(16),
-        child: TextField(
-          controller: myController,
+        child: Column(
+          children: [
+            TextField(
+              controller: cityController,
+            ),
+            TextField(
+              controller: stateController,
+            ),
+            TextField(
+              controller: zipController,
+            ),
+          ],
         ),
       ),
       floatingActionButton: FloatingActionButton(
         // When the user presses the button, show an alert dialog containing
         // the text that the user has entered into the text field.
         onPressed: () {
-          showDialog(
-            context: context,
-            builder: (context) {
-              return AlertDialog(
-                // Retrieve the text the that user has entered by using the
-                // TextEditingController.
-                content: Text(myController.text),
-              );
-            },
-          );
+          widget._setLocation([cityController.text, stateController.text, zipController.text]);
         },
         tooltip: 'Show me the value!',
         child: const Icon(Icons.text_fields),
