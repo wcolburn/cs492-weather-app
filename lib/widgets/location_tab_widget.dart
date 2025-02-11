@@ -27,11 +27,41 @@ class LocationTabWidget extends StatelessWidget {
       children: [
         LocationDisplayWidget(activeLocation: _location),
         LoctionInputWidget(setLocation: _setLocation),
-        ElevatedButton(onPressed: ()=>{_setLocation()},child: const Text("Get From GPS"))
+        ElevatedButton(onPressed: ()=>{_setLocation()},child: const Text("Get From GPS")),
+        SavedLocationsWidget(),
       ],
     );
   }
 }
+
+class SavedLocationsWidget extends StatelessWidget {
+  const SavedLocationsWidget({
+    super.key,
+    required List<savedLocation> savedLocations
+  }) : _savedLocations = savedLocations;
+
+  final List<savedLocation> _savedLocations;
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        Text("Saved Locations"),
+        _savedLocations,
+      ],
+    );
+  }
+
+}
+
+class savedLocation extends StatelessWidget{
+  @override
+  Widget build(BuildContext context) {
+    // TODO: implement build
+    throw UnimplementedError();
+  }
+}
+
 
 class LocationDisplayWidget extends StatelessWidget {
   const LocationDisplayWidget({
