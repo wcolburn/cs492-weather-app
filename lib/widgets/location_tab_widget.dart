@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:weatherapp/scripts/location.dart' as location;
+import 'package:path_provider/path_provider.dart' as path_provider;
+import 'dart:io';
+import 'dart:convert';
 
 // TODO:
 // Refer to this documentation:
@@ -25,7 +28,48 @@ class LocationTabWidget extends StatefulWidget {
 
 class _LocationTabWidgetState extends State<LocationTabWidget> {
 
-  final List<location.Location> _savedLocations = [];
+  List<location.Location> _savedLocations = [];
+
+  @override
+  void initState() {
+    super.initState();
+    readSavedLocations().then((List<location.Location> locations) {
+      _savedLocations = locations;
+    });
+  }
+
+  Future<String> get _localPath async {
+    final directory = await path_provider.getApplicationDocumentsDirectory();
+
+    return directory.path;
+  }
+
+  Future<File> get _localFile async {
+    final path = await _localPath;
+    return File('$path/counter.txt');
+  }
+
+  Future<List<location.Location>> readSavedLocations() async {
+    try {
+      final file = await _localFile;
+
+      // Read the file
+      final contents = await file.readAsString();
+      final locationsMap = (jsonDecode(contents) as List).cast<Map<String, dynamic>>();
+      return locationsMap.map<location.Location>((json) => location.Location.fromJson(json),).toList();
+    } catch (e) {
+      // If encountering an error, return []
+      return [];
+    }
+  } 
+
+  Future<File> writeSavedLocations(List<location.Location> savedLocations) async {
+    final file = await _localFile;
+
+    // Write the file
+    return file.writeAsString(savedLocations.map((loc) => jsonEncode(loc)).toString());
+    //return file.writeAsString('$counter');
+  } 
 
   void _setLocationFromAddress(String city, String state, String zip) async {
     // set location to null temporarily while it finds a new location
@@ -46,6 +90,7 @@ class _LocationTabWidgetState extends State<LocationTabWidget> {
   void _addLocation(location.Location location){
     setState(() {
       _savedLocations.add(location);
+      writeSavedLocations(_savedLocations);
     });
   }
 

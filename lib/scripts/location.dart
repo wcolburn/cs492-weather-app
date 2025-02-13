@@ -16,6 +16,13 @@ class Location{
     required this.longitude
   });
 
+  Location.fromJson(Map<String, dynamic> json)
+    : state = json['state'] as String,
+      city = json['city'] as String,
+      zip = json['zip'] as String,
+      latitude = json['latitude'] as double,
+      longitude = json['longitude'] as double;
+
 }
 
 Future<Location?> getLocationFromAddress(String rawCity, String rawState, String rawZip) async {
