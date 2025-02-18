@@ -5,5 +5,5 @@ CREATE TABLE IF NOT EXISTS location_entries
         state TEXT NOT NULL,
         zip TEXT NOT NULL,
         latitude NUMBER NOT NULL,
-        longitude NUMBER NOT NULL,
+        longitude NUMBER NOT NULL
     );

@@ -41,4 +41,11 @@ class LocationDatabase {
       await txn.rawInsert(query, [location.city, location.state, location.zip, location.latitude, location.longitude]);
     });
   }
+
+  void deleteLocation(location.Location location) async {
+    String query = await rootBundle.loadString(sqlDelete);
+    _db.transaction((txn) async {
+      await txn.rawDelete(query, [location.city, location.state, location.zip, location.latitude, location.longitude]);
+    });
+  }
 }
