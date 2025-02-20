@@ -3,8 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:weatherapp/scripts/location.dart' as location;
 import 'package:weatherapp/scripts/forecast.dart' as forecast;
 import 'package:weatherapp/scripts/time.dart' as time;
-import 'package:weatherapp/widgets/forecast_tab_widget.dart';
-import 'package:weatherapp/widgets/location_tab_widget.dart';
+import 'package:weatherapp/widgets/forecast_tab/forecast_tab_widget.dart';
+import 'package:weatherapp/widgets/location_tab/location_tab_widget.dart';
+import 'package:weatherapp/scripts/active_forecast.dart';
 
 // TODO: With a partner, refactor the entire codebase (not just main.dart, every file)
 // You should be looking for opportunities to make the code better
@@ -29,27 +30,27 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      home: MyHomePage(title: title),
+      home: WeatherForecastsHomePage(title: title),
     );
   }
 }
 
-class MyHomePage extends StatefulWidget {
-  const MyHomePage({super.key, required this.title});
+class WeatherForecastsHomePage extends StatefulWidget {
+  const WeatherForecastsHomePage({super.key, required this.title});
 
   final String title;
 
   @override
-  State<MyHomePage> createState() => _MyHomePageState();
+  State<WeatherForecastsHomePage> createState() => _WeatherForecastsHomePageState();
 }
 
-class _MyHomePageState extends State<MyHomePage> {
+class _WeatherForecastsHomePageState extends State<WeatherForecastsHomePage> {
 
-  List<forecast.Forecast> _forecastsHourly = [];
-  List<forecast.Forecast> _filteredForecastsHourly= [];
-  List<forecast.Forecast> _forecasts = [];
-  List<forecast.Forecast> _dailyForecasts = [];
-  forecast.Forecast? _activeForecast;
+  // List<forecast.Forecast> _forecastsHourly = [];
+  // List<forecast.Forecast> _filteredForecastsHourly= [];
+  // List<forecast.Forecast> _forecasts = [];
+  // List<forecast.Forecast> _dailyForecasts = [];
+  ActiveForecast _activeForecast = ActiveForecast();
   location.Location? _location;
 
   @override
@@ -64,18 +65,9 @@ class _MyHomePageState extends State<MyHomePage> {
     setLocation(await location.getLocationFromGps());
   }
 
-  Future<List<forecast.Forecast>> getForecasts(location.Location currentLocation) async {
-    return forecast.getForecastFromPoints(currentLocation.latitude, currentLocation.longitude);
-  }
-
-
-  Future<List<forecast.Forecast>> getHourlyForecasts(location.Location currentLocation) async {
-    return forecast.getForecastHourlyFromPoints(currentLocation.latitude, currentLocation.longitude);
-  }
-
   void setActiveForecast(int i){
     setState(() {
-      _filteredForecastsHourly = getFilteredForecasts(i);
+      _filteredForecastsHourly = getHourlyForecastsForDay(i);
       _activeForecast = _dailyForecasts[i];
     });
   }
@@ -97,8 +89,8 @@ class _MyHomePageState extends State<MyHomePage> {
     });
   }
 
-  List<forecast.Forecast> getFilteredForecasts(int i){
-    return _forecastsHourly.where((f)=>time.equalDates(f.startTime, _dailyForecasts[i].startTime)).toList();
+  List<forecast.Forecast> getHourlyForecastsForDay(int dayIndex){
+    return _forecastsHourly.where((f)=>time.equalDates(f.startTime, _dailyForecasts[dayIndex].startTime)).toList();
   }
 
   void setLocation(location.Location? currentLocation) async {
@@ -108,15 +100,14 @@ class _MyHomePageState extends State<MyHomePage> {
       });
     }
     else {
-      List<forecast.Forecast> currentHourlyForecasts = await getHourlyForecasts(currentLocation);
-      List<forecast.Forecast> currentForecasts = await getForecasts(currentLocation);
+      List<forecast.Forecast> currentHourlyForecasts = await forecast.getForecastHourlyFromPoints(currentLocation.latitude, currentLocation.longitude);
+      List<forecast.Forecast> currentForecasts = await forecast.getForecastFromPoints(currentLocation.latitude, currentLocation.longitude);
       setState((){
-        _location = currentLocation;
         _location = currentLocation;
         _forecastsHourly = currentHourlyForecasts;
         _forecasts = currentForecasts;
         setDailyForecasts();
-        _filteredForecastsHourly = getFilteredForecasts(0);
+        _filteredForecastsHourly = getHourlyForecastsForDay(0);
         _activeForecast = _forecastsHourly[0];
       });
       }

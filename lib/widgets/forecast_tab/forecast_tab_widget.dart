@@ -3,9 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:weatherapp/scripts/forecast.dart' as forecast;
 import 'package:weatherapp/scripts/location.dart' as location;
 
-import 'package:weatherapp/widgets/location_widget.dart';
-import 'package:weatherapp/widgets/forecast_summaries_widget.dart';
-import 'package:weatherapp/widgets/forecast_widget.dart';
+import 'package:weatherapp/widgets/location_tab/location_widget.dart';
+import 'package:weatherapp/widgets/forecast_tab/forecast_summaries_widget.dart';
+import 'package:weatherapp/widgets/forecast_tab/forecast_widget.dart';
 
 
 

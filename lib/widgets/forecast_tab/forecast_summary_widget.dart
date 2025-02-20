@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:weatherapp/scripts/forecast.dart' as forecast;
 import 'package:weatherapp/scripts/time.dart' as time;
-import 'package:weatherapp/widgets/weather_icon_widget.dart';
+import 'package:weatherapp/widgets/forecast_tab/weather_icon_widget.dart';
 
 
 

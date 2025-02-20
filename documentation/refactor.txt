@@ -1,6 +1,12 @@
 Project Name: CS492 Weather App
 Refactor Date: 2/20/2025
-Refactorers: [your name1], [your name2]
+Refactorers: Liam Colburn, Xander Bailey
+
+
+Liam: Coding
+Xander: Documentation
+
+
 
 Template:
 Purpose of the Refactor: [Explain why the refactoring was necessary. Example: "The purpose of this refactor was to simplify the authentication logic and improve readability."]
