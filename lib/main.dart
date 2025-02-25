@@ -4,6 +4,7 @@ import 'package:weatherapp/widgets/forecast/forecast_tab_widget.dart';
 import 'package:weatherapp/widgets/location/location_tab_widget.dart';
 import 'package:weatherapp/providers/location_provider.dart';
 import 'package:weatherapp/providers/forecast_provider.dart';
+import 'package:weatherapp/providers/dark_mode_provider.dart';
 
 // TODOS: The TODOs are located in Assignment8-1 in canvas assignments
 void main() {
@@ -12,6 +13,7 @@ void main() {
     ChangeNotifierProvider(
         create: (context) => LocationProvider(
             Provider.of<ForecastProvider>(context, listen: false))),
+    ChangeNotifierProvider(create: (context) => DarkModeProvider()),
   ], child: const MyApp()));
 }
 
@@ -22,16 +24,26 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var darkModeProvider = Provider.of<DarkModeProvider>(context);
     return MaterialApp(
       title: title,
       darkTheme: ThemeData.dark(),
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: const Color.fromARGB(255, 143, 216, 233)),
-        useMaterial3: true,
-      ),
+      theme: darkModeProvider.isDarkMode ? darkMode() : lightMode(),
       home: MyHomePage(title: title),
     );
   }
+
+  ThemeData lightMode() {
+    return ThemeData(
+      colorScheme: ColorScheme.fromSeed(seedColor: const Color.fromARGB(255, 143, 216, 233)),
+      useMaterial3: true,
+    );
+  }
+
+  ThemeData darkMode() {
+    return ThemeData.dark();
+  }
+
 }
 
 class MyHomePage extends StatefulWidget {
